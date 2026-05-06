@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aristo Xiong | Level Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       VARIABLES — Premium Palette
+    ============================================ */
+    :root {
+      --bg:        #faf8f5;
+      --bg-warm:   #f0e9de;
+      --bg-deep:   #e5ddd0;
+      --bg-card:   #fffdfb;
+      --bg-dark:   #1a1612;
+      --text:      #1a1612;
+      --text-mid:  #6b5d4f;
+      --text-dim:  #a89880;
+      --accent:    #b8724a;
+      --accent-lt: #e8d4c0;
+      --accent-dk: #8a4f2e;
+      --border:    #e0d5c8;
+      --shadow:    rgba(26,22,18,0.08);
+      --shadow-lg: rgba(26,22,18,0.14);
+      --nav-h:     68px;
+      --r-sm:      8px;
+      --r-md:      14px;
+      --r-lg:      20px;
+      /* section bg tones */
+      --s-hero:    #faf8f5;
+      --s-about:   #f2ebe0;
+      --s-port:    #eae2d5;
+      --s-contact: #faf8f5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3, .serif {
+      font-family: 'Noto Serif SC', 'Songti SC', serif;
+      font-weight: 700;
+    }
+    .en { font-family: 'Space Grotesk', sans-serif; letter-spacing: .04em; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ============================================
+       NAV — Premium Glass
+    ============================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(250, 248, 245, 0.92);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      z-index: 1000;
+      display: flex; align-items: center;
+      padding: 0 72px;
+      transition: border-color .35s, box-shadow .35s, background .35s;
+    }
+    nav.scrolled {
+      border-color: var(--border);
+      box-shadow: 0 4px 32px var(--shadow);
+      background: rgba(250, 248, 245, 0.96);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', 'Noto Serif SC', serif;
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: .04em; color: var(--text);
+    }
+    .nav-logo em { font-style: normal; color: var(--accent); }
+    .nav-links { display: flex; gap: 44px; margin-left: auto; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 400;
+      color: var(--text-mid); letter-spacing: .06em;
+      transition: color .2s;
+      position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute;
+      bottom: -1px; left: 0; width: 0; height: 1.5px;
+      background: var(--accent); transition: width .28s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; margin-left: auto; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--text); border-radius: 4px; transition: all .3s; }
+
+    /* ============================================
+       HERO — Full Width Artistic
+    ============================================ */
+    .hero {
+      min-height: 100vh;
+      position: relative; overflow: hidden;
+    }
+    /* decorative blobs — extend to viewport edges */
+    .hero::before {
+      content: '';
+      position: absolute; right: -120px; top: 5%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(184,114,74,.14) 0%, rgba(184,114,74,.06) 40%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; left: -160px; bottom: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(184,114,74,.10) 0%, rgba(184,114,74,.04) 40%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    /* subtle gradient overlay */
+    .hero-gradient {
+      position: absolute; inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 100% 0%, rgba(184,114,74,.05) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 80% at 0% 100%, rgba(184,114,74,.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    /* Hero constraint container for alignment with sections */
+    .hero-inner {
+      display: flex; align-items: center;
+      padding: calc(var(--nav-h) + 80px) 80px 60px;
+      gap: 80px;
+      max-width: 1280px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .hero-text { 
+      flex: 1; 
+      position: relative; 
+      z-index: 1; 
+      max-width: 520px;
+    }
+    .hero-eyebrow {
+      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); font-weight: 500;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 40px; height: 1.5px; background: var(--accent);
+    }
+    .hero-en {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 6px;
+    }
+    .hero h1 {
+      font-size: 4.4rem; line-height: 1.05;
+      color: var(--text); margin-bottom: 12px;
+      letter-spacing: -.03em;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-tagline {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.25rem; color: var(--text-mid);
+      margin-bottom: 24px; letter-spacing: .03em;
+    }
+    .hero-desc {
+      font-size: .9rem; color: var(--text-mid);
+      line-height: 1.95; max-width: 480px;
+      margin-bottom: 48px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-pri {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 36px; border-radius: var(--r-sm);
+      background: var(--accent); color: #fff;
+      font-size: .85rem; font-weight: 500; letter-spacing: .04em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      border: none; cursor: pointer;
+    }
+    .btn-pri:hover { background: var(--accent-dk); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(184,114,74,.32); }
+    .btn-sec {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 36px; border-radius: var(--r-sm);
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+      font-size: .85rem; font-weight: 400;
+      transition: border-color .2s, background .2s, transform .15s;
+      cursor: pointer;
+    }
+    .btn-sec:hover { border-color: var(--accent); background: rgba(184,114,74,.08); transform: translateY(-2px); }
+
+    .hero-right { 
+      flex-shrink: 0; 
+      position: relative; 
+      z-index: 1; 
+      /* 右移并放大 */
+      margin-left: auto;
+      margin-right: 20px;
+    }
+    .hero-avatar {
+      width: 380px; height: 500px;
+      border-radius: var(--r-lg); overflow: hidden;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      position: relative; z-index: 1;
+      box-shadow: 0 24px 72px var(--shadow-lg);
+    }
+    .hero-avatar-frame {
+      position: absolute;
+      top: -16px; left: -16px; right: 16px; bottom: 16px;
+      border: 2px solid var(--accent-lt);
+      border-radius: var(--r-lg); z-index: 0;
+    }
+    .avatar-ph {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--text-dim); gap: 10px;
+    }
+    .avatar-ph img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-ph svg { opacity: .3; }
+    .avatar-ph span { font-size: .75rem; letter-spacing: .08em; }
+
+    /* ============================================
+       ABOUT
+    ============================================ */
+    .about-section { background: var(--s-about); }
+    .section { padding: 108px 80px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-header { margin-bottom: 64px; }
+    .section-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.6rem; font-weight: 700;
+      color: var(--text); margin-bottom: 14px;
+      letter-spacing: -.015em;
+    }
+    .section-title-en {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .8rem; color: var(--text-dim);
+      letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-philosophy {
+      font-size: .95rem; color: var(--text-mid);
+      line-height: 1.85; margin-bottom: 16px;
+      font-style: italic;
+      max-width: 680px;
+      padding-left: 20px;
+      border-left: 3px solid var(--accent-lt);
+    }
+    .section-sub {
+      font-size: .88rem; color: var(--text-dim);
+      max-width: 520px; line-height: 1.8;
+    }
+    .ornament {
+      width: 48px; height: 3px; background: var(--accent);
+      margin: 20px 0; border-radius: 4px;
+    }
+
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 96px; align-items: start;
+    }
+    .about-intro h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem; font-weight: 700;
+      margin-bottom: 20px; color: var(--text);
+    }
+    .about-intro p {
+      font-size: .9rem; color: var(--text-mid);
+      line-height: 1.95; margin-bottom: 14px;
+    }
+    /* stats card */
+    .about-stats {
+      display: flex; flex-wrap: wrap; gap: 0;
+      margin-top: 24px; margin-bottom: 24px;
+      background: var(--bg-card);
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 6px 28px var(--shadow);
+    }
+    .astat {
+      flex: 1; text-align: center; padding: 22px 14px;
+      position: relative; min-width: 80px;
+    }
+    .astat + .astat::before {
+      content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+      width: 1px; background: var(--border);
+    }
+    .astat-n {
+      font-family: 'Space Grotesk', 'Noto Serif SC', serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--accent); line-height: 1; margin-bottom: 6px;
+    }
+    .astat-l { font-size: .72rem; color: var(--text-dim); letter-spacing: .03em; line-height: 1.3; }
+    .astat-en { font-family: 'Space Grotesk', sans-serif; font-size: .6rem; color: var(--text-dim); letter-spacing: .06em; display: block; }
+
+    .skill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .skill-tag {
+      padding: 6px 16px; border-radius: 20px;
+      font-size: .78rem; background: var(--bg);
+      color: var(--text-mid); border: 1px solid var(--border);
+      letter-spacing: .02em;
+      transition: all .2s;
+    }
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ============================================
+       TIMELINE — Enhanced
+    ============================================ */
+    .tl-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .tl-wrap { position: relative; }
+    .tl-scroll {
+      max-height: 480px; overflow-y: auto; padding-right: 8px;
+      scrollbar-width: thin; scrollbar-color: var(--accent-lt) transparent;
+    }
+    .tl-scroll::-webkit-scrollbar { width: 4px; }
+    .tl-scroll::-webkit-scrollbar-thumb { background: var(--accent-lt); border-radius: 4px; }
+    .tl-fade {
+      position: absolute; bottom: 0; left: 0; right: 8px;
+      height: 60px;
+      background: linear-gradient(transparent, var(--s-about));
+      pointer-events: none;
+    }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 0; top: 12px; bottom: 12px; width: 1px;
+      background: linear-gradient(to bottom, var(--accent-lt), var(--border), var(--border));
+    }
+    
+    /* Timeline item */
+    .tl-item { 
+      position: relative; 
+      padding-left: 32px; 
+      padding-bottom: 24px; 
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -4px; top: 0; right: -12px; bottom: 0;
+      background: rgba(184,114,74,.04);
+      border-radius: var(--r-md);
+      opacity: 0;
+      transition: opacity .3s;
+      z-index: 0;
+    }
+    .tl-item:hover { transform: translateX(6px); }
+    .tl-item:hover::before { opacity: 1; }
+    
+    .tl-dot {
+      position: absolute; left: -5px; top: 10px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--s-about);
+      box-shadow: 0 0 0 2px var(--accent-lt);
+      z-index: 1;
+    }
+    .tl-dot.sm { 
+      width: 8px; height: 8px; left: -4px; top: 12px; 
+      box-shadow: none; background: var(--text-dim); border: none; 
+    }
+    
+    /* Type badge */
+    .tl-type {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: .65rem; font-weight: 600;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .tl-type.intern { background: rgba(184,114,74,.15); color: var(--accent-dk); }
+    .tl-type.overseas { background: rgba(140,130,160,.12); color: #7a6a8a; }
+    .tl-type.academic { background: rgba(100,140,160,.12); color: #5a8090; }
+    .tl-type.award { background: rgba(180,140,60,.15); color: #b48c3c; }
+    .tl-type.social { background: rgba(100,150,130,.12); color: #5a8a70; }
+    .tl-type.volunteer { background: rgba(140,120,100,.12); color: #7a6a5a; }
+    
+    .tl-date { 
+      font-size: .72rem; 
+      color: var(--accent); 
+      font-weight: 600; 
+      letter-spacing: .06em; 
+      margin-bottom: 4px; 
+    }
+    .tl-title { 
+      font-size: .98rem; 
+      font-weight: 600; 
+      color: var(--text); 
+      margin-bottom: 3px; 
+      line-height: 1.4;
+    }
+    .tl-sub { font-size: .78rem; color: var(--text-dim); line-height: 1.5; }
+
+    /* ============================================
+       PORTFOLIO
+    ============================================ */
+    .portfolio-section { background: var(--s-port); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .portfolio-section .section-inner { max-width: 1280px; }
+
+    /* ---- ARTISTIC TAB SWITCHER ---- */
+    .p-tabs {
+      display: flex; gap: 0;
+      margin-bottom: 56px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 6px;
+      width: fit-content;
+      position: relative;
+      box-shadow: 0 4px 20px var(--shadow);
+      overflow: visible;
+    }
+    /* sliding pill */
+    .p-tabs::before {
+      content: '';
+      position: absolute;
+      top: 6px; bottom: 6px;
+      width: calc(33.333% - 4px);
+      background: var(--accent);
+      border-radius: calc(var(--r-lg) - 6px);
+      transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), left .4s cubic-bezier(.34, 1.56, .64, 1);
+      z-index: 0;
+      box-shadow: 0 6px 24px rgba(184,114,74,.4);
+    }
+    .p-tabs.tab-0::before { left: 6px; }
+    .p-tabs.tab-1::before { left: calc(33.333% + 2px); }
+    .p-tabs.tab-2::before { left: calc(66.666% - 2px); }
+
+    .p-tab {
+      position: relative; z-index: 1;
+      padding: 12px 40px; border-radius: calc(var(--r-lg) - 6px);
+      font-size: .88rem; cursor: pointer;
+      color: var(--text-mid); font-weight: 400;
+      transition: color .28s, font-weight .2s;
+      border: none; background: transparent;
+      font-family: inherit; white-space: nowrap;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .p-tab:hover { 
+      color: var(--text); 
+      font-weight: 600; 
+    }
+    .p-tab.active { 
+      color: #fff; 
+      font-weight: 600; 
+    }
+
+    /* tab inner content */
+    .tab-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .tab-icon svg { width: 100%; height: 100%; stroke-width: 1.5; fill: none; stroke: currentColor; }
+    .tab-ch { font-family: 'Noto Serif SC', serif; font-weight: 600; }
+    .tab-en { font-family: 'Space Grotesk', sans-serif; font-size: .62rem; letter-spacing: .1em; opacity: .7; }
+
+    /* panels */
+    .p-panel { display: none; }
+    .p-panel.active { display: block; animation: fadeUp .4s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       GAME CARDS — Three Column Layout with carousel
+    ============================================ */
+    .g-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .g-card {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      overflow: hidden; border: 1px solid var(--border);
+      transition: transform .35s, box-shadow .35s;
+      cursor: pointer;
+    }
+    .g-card:hover { transform: translateY(-8px); box-shadow: 0 28px 72px var(--shadow-lg); }
+
+    .g-img { width: 100%; height: 300px; background: var(--bg-warm); overflow: hidden; position: relative; }
+    .g-img:hover .g-arr { opacity: 1; }
+    
+    .g-carousel { position: relative; width: 100%; height: 100%; }
+    .g-car-track { display: flex; height: 100%; transition: transform .4s ease; }
+    .g-car-slide { min-width: 100%; height: 100%; }
+    .g-car-slide img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .g-arr {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(250,248,245,.88); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.2rem; color: var(--text-mid);
+      transition: all .2s; backdrop-filter: blur(4px);
+      opacity: 0; z-index: 2;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    }
+    .g-arr:hover { background: #fff; color: var(--accent); box-shadow: 0 4px 16px var(--shadow); }
+    .g-arr.l { left: 10px; }
+    .g-arr.r { right: 10px; }
+    
+    .g-car-dots {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 2;
+    }
+    .g-car-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.5); cursor: pointer; transition: all .2s; }
+    .g-car-dot.on { background: #fff; width: 16px; border-radius: 3px; }
+    
+    .g-badge {
+      position: absolute; top: 14px; left: 14px; z-index: 3;
+      padding: 5px 14px; border-radius: 20px;
+      font-size: .68rem; font-weight: 600;
+      background: rgba(250,248,245,.9);
+      color: var(--accent-dk); backdrop-filter: blur(8px);
+      letter-spacing: .03em;
+    }
+    .g-badge.intern { background: rgba(26,22,18,.85); color: var(--accent-lt); backdrop-filter: blur(8px); }
+
+    .g-body { padding: 26px; }
+    .g-title { font-family: 'Noto Serif SC', serif; font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.5; }
+    .g-meta { font-size: .75rem; color: var(--text-dim); margin-bottom: 10px; letter-spacing: .02em; }
+    .g-desc { font-size: .82rem; color: var(--text-mid); line-height: 1.7; }
+    .g-tags { margin-top: 13px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .g-tag { font-size: .7rem; padding: 4px 12px; border-radius: 20px; background: var(--bg); color: var(--text-dim); border: 1px solid var(--border); }
+
+    /* ============================================
+       ARCH CARDS — with inline carousel
+    ============================================ */
+    .a-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .a-card {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      overflow: hidden; border: 1px solid var(--border);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+    }
+    .a-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px var(--shadow-lg); }
+
+    .a-img-wrap { width: 100%; height: 280px; background: var(--bg-warm); overflow: hidden; position: relative; cursor: pointer; }
+    .a-img-wrap:hover .a-arr { opacity: 1; }
+    
+    .a-carousel { position: relative; width: 100%; height: 100%; }
+    .a-car-track { display: flex; height: 100%; transition: transform .4s ease; }
+    .a-car-slide { min-width: 100%; height: 100%; }
+    .a-car-slide img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .a-arr {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(250,248,245,.88); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem; color: var(--text-mid);
+      transition: all .2s; backdrop-filter: blur(4px);
+      opacity: 0; z-index: 2;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    }
+    .a-arr:hover { background: #fff; color: var(--accent); box-shadow: 0 4px 16px var(--shadow); }
+    .a-arr.l { left: 8px; }
+    .a-arr.r { right: 8px; }
+    
+    .a-car-dots {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px; z-index: 2;
+    }
+    .a-car-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); cursor: pointer; transition: all .2s; }
+    .a-car-dot.on { background: #fff; width: 14px; border-radius: 3px; }
+
+    .a-body { padding: 22px 24px; }
+    .a-theme { font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .a-theme-en { font-family: 'Space Grotesk', sans-serif; font-size: .58rem; color: var(--text-dim); letter-spacing: .08em; display: block; margin-bottom: 3px; }
+    .a-title { font-family: 'Noto Serif SC', serif; font-size: .95rem; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .a-desc { font-size: .78rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 13px; }
+    .a-kws { display: flex; flex-wrap: wrap; gap: 5px; }
+    .a-kw { font-size: .67rem; padding: 3px 11px; border-radius: 20px; background: var(--bg); color: var(--text-dim); border: 1px solid var(--border); }
+
+    /* ============================================
+       SKETCH CAROUSEL
+    ============================================ */
+    .sk-carousel { position: relative; max-width: 900px; margin: 0 auto; overflow: hidden; border-radius: var(--r-lg); box-shadow: 0 16px 56px var(--shadow-lg); }
+    .sk-track { display: flex; transition: transform .55s cubic-bezier(.4,0,.2,1); }
+    .sk-slide { min-width: 100%; aspect-ratio: 16/9; background: var(--bg-warm); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+    .sk-slide img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+    .sk-slide:hover img { transform: scale(1.02); }
+    .sk-slide::after {
+      content: '点击查看大图'; position: absolute;
+      bottom: 16px; right: 16px;
+      padding: 6px 14px; border-radius: 16px;
+      background: rgba(26,22,18,.75); color: #fff;
+      font-size: .7rem; opacity: 0;
+      transition: opacity .2s; pointer-events: none;
+    }
+    .sk-slide:hover::after { opacity: 1; }
+    .sk-ph { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); gap: 10px; }
+    .sk-ph svg { opacity: .2; width: 48px; height: 48px; }
+    .sk-ph span { font-size: .82rem; letter-spacing: .04em; }
+    .sk-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+    .sk-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all .2s; }
+    .sk-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+    .sk-arr {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(250,248,245,.9); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.3rem; color: var(--text-mid);
+      transition: all .2s; backdrop-filter: blur(8px);
+      z-index: 1;
+    }
+    .sk-arr:hover { background: #fff; color: var(--accent); box-shadow: 0 8px 24px var(--shadow); }
+    .sk-arr.l { left: 16px; }
+    .sk-arr.r { right: 16px; }
+
+    /* ============================================
+       IMAGE MODAL — Full Screen Viewer
+    ============================================ */
+    .img-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,22,18,.92);
+      z-index: 3000; align-items: center; justify-content: center;
+      flex-direction: column;
+      backdrop-filter: blur(12px);
+    }
+    .img-modal.open { display: flex; }
+    .img-modal-content {
+      max-width: 90vw; max-height: 75vh;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      animation: modalIn .3s ease;
+    }
+    .img-modal-content img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .img-modal-nav {
+      display: flex; gap: 16px; margin-top: 20px;
+    }
+    .img-modal-nav button {
+      padding: 10px 24px; border-radius: var(--r-sm);
+      background: rgba(255,255,255,.12); color: #fff;
+      border: 1px solid rgba(255,255,255,.2);
+      cursor: pointer; font-size: .85rem;
+      transition: background .2s;
+    }
+    .img-modal-nav button:hover { background: rgba(255,255,255,.2); }
+    .img-modal-close {
+      position: absolute; top: 20px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 1.4rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .img-modal-close:hover { background: rgba(255,255,255,.2); }
+    .img-modal-dots {
+      display: flex; gap: 8px; margin-top: 16px;
+    }
+    .img-modal-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.35); cursor: pointer;
+      transition: all .2s;
+    }
+    .img-modal-dot.on { background: #fff; width: 24px; border-radius: 4px; }
+
+    /* ============================================
+       MODAL
+    ============================================ */
+    .modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,22,18,.7);
+      z-index: 2000; align-items: center; justify-content: center;
+      padding: 24px; backdrop-filter: blur(10px);
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      max-width: 800px; width: 100%; max-height: 88vh;
+      overflow-y: auto; position: relative;
+      animation: modalIn .32s cubic-bezier(.4,0,.2,1);
+      scrollbar-width: thin; scrollbar-color: var(--accent-lt) transparent;
+      box-shadow: 0 32px 80px rgba(26,22,18,.25);
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(.96) translateY(20px); }
+      to { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .modal-hd {
+      position: sticky; top: 0; background: var(--bg-card);
+      padding: 16px 24px;
+      display: flex; justify-content: flex-end;
+      border-bottom: 1px solid var(--border); z-index: 1;
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
+    }
+    .modal-cls {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg-warm);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: var(--text-mid); transition: background .2s;
+    }
+    .modal-cls:hover { background: var(--border); }
+    .modal-bd { padding: 36px 44px; }
+    .m-badge { display: inline-block; padding: 5px 16px; border-radius: 20px; font-size: .72rem; font-weight: 600; background: var(--accent-lt); color: var(--accent-dk); margin-bottom: 14px; }
+    .m-badge.intern { background: rgba(26,22,18,.85); color: var(--accent-lt); }
+    .m-title { font-family: 'Noto Serif SC', serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+    .m-meta { font-size: .8rem; color: var(--text-dim); margin-bottom: 32px; }
+    .m-sec { margin-bottom: 26px; }
+    .m-sec-tl {
+      font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .m-sec-tl::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .m-sec p { font-size: .9rem; color: var(--text-mid); line-height: 1.9; }
+    .m-sec ul { list-style: none; }
+    .m-sec ul li { font-size: .87rem; color: var(--text-mid); padding-left: 18px; position: relative; margin-bottom: 8px; line-height: 1.7; }
+    .m-sec ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent-lt); }
+
+    /* ============================================
+       CONTACT
+    ============================================ */
+    .contact-section { text-align: center; background: var(--s-contact); }
+    .contact-section .section-header { margin-bottom: 52px; }
+    .contact-section .ornament { margin: 0 auto 20px; }
+    .contact-section .section-sub { margin: 0 auto; text-align: center; }
+    .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .contact-lk {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 36px; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: var(--r-md);
+      font-size: .88rem; color: var(--text);
+      transition: all .22s;
+    }
+    .contact-lk:hover { border-color: var(--accent); background: rgba(184,114,74,.08); transform: translateY(-3px); box-shadow: 0 10px 32px var(--shadow); }
+    .contact-ic { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-lt); display: flex; align-items: center; justify-content: center; color: var(--accent-dk); font-size: .95rem; }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    footer { text-align: center; padding: 40px; font-size: .75rem; color: var(--text-dim); border-top: 1px solid var(--border); letter-spacing: .03em; }
+    footer em { font-style: normal; color: var(--accent); }
+
+    /* ============================================
+       MOBILE MENU
+    ============================================ */
+    .mmenu { display: none; position: fixed; inset: 0; background: rgba(250,248,245,.98); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 40px; backdrop-filter: blur(20px); }
+    .mmenu.open { display: flex; }
+    .mmenu a { font-family: 'Noto Serif SC', serif; font-size: 1.5rem; font-weight: 700; color: var(--text); transition: color .2s; }
+    .mmenu a:hover { color: var(--accent); }
+    .mmenu-x { position: absolute; top: 22px; right: 26px; font-size: 1.8rem; cursor: pointer; color: var(--text-mid); }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 1060px) {
+      .hero-inner { flex-direction: column-reverse; padding: calc(var(--nav-h) + 48px) 40px 88px; gap: 48px; text-align: center; }
+      .hero-eyebrow { justify-content: center; }
+      .hero h1 { font-size: 3.2rem; }
+      .hero-btns { justify-content: center; }
+      .hero-right { display: flex; flex-direction: column; align-items: center; }
+      .hero-avatar { width: 240px; height: 320px; }
+      .section { padding: 84px 40px; }
+      .about-grid { grid-template-columns: 1fr; gap: 56px; }
+      .g-grid { grid-template-columns: repeat(2,1fr); }
+      .a-grid { grid-template-columns: repeat(2,1fr); }
+      nav { padding: 0 32px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 680px) {
+      .hero h1 { font-size: 2.6rem; }
+      .hero-inner { padding-left: 20px; padding-right: 20px; }
+      .g-grid { grid-template-columns: 1fr; }
+      .a-grid { grid-template-columns: 1fr; }
+      .p-tabs { width: 100%; }
+      .p-tab { padding: 10px 20px; }
+      .section { padding: 64px 20px; }
+      .section-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <span class="nav-logo">Aristo<span style="color:var(--accent)"> · </span>熊乾弘</span>
+  <ul class="nav-links">
+    <li><a href="#about">关于我</a></li>
+    <li><a href="#experience">履历</a></li>
+    <li><a href="#portfolio">作品集</a></li>
+    <li><a href="#contact">联系</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMM()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mmenu" id="mmenu">
+  <div class="mmenu-x" onclick="toggleMM()">×</div>
+  <a href="#about" onclick="toggleMM()">关于我</a>
+  <a href="#experience" onclick="toggleMM()">履历</a>
+  <a href="#portfolio" onclick="toggleMM()">作品集</a>
+  <a href="#contact" onclick="toggleMM()">联系</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-gradient"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-en en">Level Designer · Architecture</div>
+      <div class="hero-eyebrow">关卡策划 · 建筑学</div>
+      <h1>熊乾弘</h1>
+      <p class="hero-tagline">用空间思维，做有温度的关卡</p>
+      <p class="hero-desc">重庆大学建筑学本科，腾讯天美两段实习关卡策划经验。关注叙事驱动与空间体验的融合，用建筑学视角解读游戏关卡设计。</p>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-pri">查看作品集 →</a>
+        <a href="#contact" class="btn-sec">联系我</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-avatar">
+        <div class="avatar-ph">
+          <img src="works/avatar.jpg.jpg" alt="Aristo Xiong" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <span>Upload Photo</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-avatar-frame"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-section" id="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-title-en">About / 关于我</div>
+      <div class="ornament"></div>
+      <h2 class="section-title">关于我</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-intro">
+        <h3>建筑学 × 游戏关卡 / Architecture × Level Design</h3>
+        <p>重庆大学建筑学本科，对游戏关卡设计有浓厚兴趣，擅长将建筑学的空间叙事思维融入关卡设计。在腾讯天美（Timi Studio）有两段实习经历，参与《极品飞车：集结》赛道设计及某在研项目的关卡框架搭建。</p>
+        <p>业余独立开发了《文物修复师》个人 Demo，涵盖完整的关卡设计文档与 UE5 白盒实现。另有《旷野之息》初始台地 53 页系统性拆解，融合凯文·林奇城市意向理论与彭一刚《建筑空间组合论》。</p>
+
+        <div class="about-stats">
+          <div class="astat"><div class="astat-n">2</div><div class="astat-l">腾讯天美实习<span class="astat-en">TIMI Internships</span></div></div>
+          <div class="astat"><div class="astat-n">8w+</div><div class="astat-l">玩家点赞<span class="astat-en">Player Likes</span></div></div>
+          <div class="astat"><div class="astat-n">3.71</div><div class="astat-l">GPA<span class="astat-en">GPA</span></div></div>
+          <div class="astat"><div class="astat-n">44+</div><div class="astat-l">荣誉奖项<span class="astat-en">Awards</span></div></div>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-tag">UE5</span>
+          <span class="skill-tag">关卡白盒</span>
+          <span class="skill-tag">Rhino / SketchUp</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">Illustrator</span>
+          <span class="skill-tag">InDesign</span>
+          <span class="skill-tag">空间叙事</span>
+          <span class="skill-tag">手绘速写</span>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div id="experience">
+        <div class="tl-header">
+          <div class="section-num">Experience / 履历</div>
+        </div>
+        <div class="tl-wrap">
+          <div class="tl-scroll" id="tlScroll">
+            <div class="timeline">
+              <!-- 实习 -->
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <span class="tl-type intern">实习</span>
+                <div class="tl-date">2025.11 — 2026.01</div>
+                <div class="tl-title">腾讯天美 · 某在研项目</div>
+                <div class="tl-sub">Timi Studio · 关卡策划 · 实习转正</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <span class="tl-type intern">实习</span>
+                <div class="tl-date">2025.07 — 2025.10</div>
+                <div class="tl-title">腾讯天美 · 极品飞车：集结</div>
+                <div class="tl-sub">Timi Studio · 关卡策划 · 暑期实习 · 独立完成赛道设计</div>
+              </div>
+              <!-- 教育经历 -->
+              <div class="tl-item">
+                <div class="tl-dot sm"></div>
+                <span class="tl-type academic">教育经历</span>
+                <div class="tl-date">2021.09 — 至今</div>
+                <div class="tl-title">重庆大学 · 建筑学</div>
+                <div class="tl-sub">CQU · 本科 · GPA 3.71 · 综测学院第二</div>
+              </div>
+              <!-- 境外访学 -->
+              <div class="tl-item">
+                <div class="tl-dot sm"></div>
+                <span class="tl-type overseas">境外访学</span>
+                <div class="tl-date">2024.07 — 2024.08</div>
+                <div class="tl-title">重庆大学 · 圆梦计划</div>
+                <div class="tl-sub">NUS 访学 · 新加坡国立大学跨文化学术考察</div>
+              </div>
+              <!-- 学生工作 -->
+              <div class="tl-item">
+                <div class="tl-dot sm"></div>
+                <span class="tl-type volunteer">学生工作</span>
+                <div class="tl-date">2024 — 2025</div>
+                <div class="tl-title">重庆大学青年志愿者协会</div>
+                <div class="tl-sub">执行主席 · 举办志愿活动 37 次 · 志愿服务 576h+</div>
+              </div>
+              <!-- 社会实践 -->
+              <div class="tl-item">
+                <div class="tl-dot sm"></div>
+                <span class="tl-type social">社会实践</span>
+                <div class="tl-date">2024</div>
+                <div class="tl-title">全国大学生农村支教奖 · 金奖</div>
+                <div class="tl-sub">队长 · 藏区美育教育 · 藏式空间更新</div>
+              </div>
+              <!-- 获奖 -->
+              <div class="tl-item">
+                <div class="tl-dot sm"></div>
+                <span class="tl-type award">获奖</span>
+                <div class="tl-date">2023</div>
+                <div class="tl-title">国家励志奖学金</div>
+                <div class="tl-sub">国家级 · 重庆大学</div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-fade" id="tlFade"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="section portfolio-section" id="portfolio">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-title-en">Portfolio / 作品集</div>
+      <div class="ornament"></div>
+      <h2 class="section-title">作品集</h2>
+      <p class="section-philosophy">「 用建筑空间叙事思维，理解游戏关卡的节奏与层次；在虚与实之间，寻找设计的通感。」</p>
+      <p class="section-sub">Level Design · Architectural Space & Hand Drawing</p>
+    </div>
+
+    <!-- ARTISTIC TABS -->
+    <div class="p-tabs tab-0" id="pTabs">
+      <button class="p-tab active" data-tab="0" onclick="switchTab(0)">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" stroke-width="1.5"/><path d="M8 12h1.5M14.5 12H16M12 10v4" stroke-width="1.5"/></svg>
+        </div>
+        <div>
+          <div class="tab-ch">游戏</div>
+          <div class="tab-en">Game</div>
+        </div>
+      </button>
+      <button class="p-tab" data-tab="1" onclick="switchTab(1)">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="17" rx="1" stroke-width="1.5"/><rect x="13" y="9" width="7" height="12" rx="1" stroke-width="1.5"/><path d="M6 8h3M6 12h3M6 16h3M15.5 13h3M15.5 17h3" stroke-width="1.5"/></svg>
+        </div>
+        <div>
+          <div class="tab-ch">建筑</div>
+          <div class="tab-en">Architecture</div>
+        </div>
+      </button>
+      <button class="p-tab" data-tab="2" onclick="switchTab(2)">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke-width="1.5"/></svg>
+        </div>
+        <div>
+          <div class="tab-ch">手绘</div>
+          <div class="tab-en">Sketch</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- GAME PANEL -->
+    <div class="p-panel active" id="panel-0">
+      <div class="g-grid">
+        <div class="g-card" onclick="openM('mj-jc')">
+          <div class="g-img" onclick="event.stopPropagation(); openM('mj-jc-img')">
+            <div class="g-carousel" id="g-car-mj-jc">
+              <div class="g-car-track">
+                <div class="g-car-slide"><img src="works/mj_01.jpg" alt="极品飞车赛道"></div>
+                <div class="g-car-slide"><img src="works/mj_02.gif" alt="极品飞车赛道"></div>
+                <div class="g-car-slide"><img src="works/mj_03.gif" alt="极品飞车赛道"></div>
+              </div>
+              <div class="g-arr l" onclick="event.stopPropagation(); moveGCur('mj-jc', -1)">‹</div>
+              <div class="g-arr r" onclick="event.stopPropagation(); moveGCur('mj-jc', 1)">›</div>
+              <div class="g-car-dots" id="g-dots-mj-jc"></div>
+            </div>
+            <span class="g-badge intern">实习项目</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">《极品飞车：集结》<br>沙海惊鸿赛道</div>
+            <div class="g-meta">腾讯天美 Timi Studio · 2025</div>
+            <p class="g-desc">独立完成赛道关卡设计。关卡白盒阶段获得 8万+ 玩家点赞，首条 C 级封闭场景赛道。</p>
+            <div class="g-tags"><span class="g-tag">竞速关卡</span><span class="g-tag">场景设计</span><span class="g-tag">封闭赛道</span></div>
+          </div>
+        </div>
+
+        <div class="g-card" onclick="openM('mj-ww')">
+          <div class="g-img" onclick="event.stopPropagation(); openM('mj-ww-img')">
+            <div class="g-carousel" id="g-car-mj-ww">
+              <div class="g-car-track">
+                <div class="g-car-slide"><img src="works/ww_01.png" alt="文物修复师"></div>
+                <div class="g-car-slide"><img src="works/ww_02.png" alt="文物修复师"></div>
+                <div class="g-car-slide"><img src="works/ww_03.png" alt="文物修复师"></div>
+              </div>
+              <div class="g-arr l" onclick="event.stopPropagation(); moveGCur('mj-ww', -1)">‹</div>
+              <div class="g-arr r" onclick="event.stopPropagation(); moveGCur('mj-ww', 1)">›</div>
+              <div class="g-car-dots" id="g-dots-mj-ww"></div>
+            </div>
+            <span class="g-badge">个人 Demo</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">《文物修复师》<br>个人 Demo</div>
+            <div class="g-meta">独立开发 · UE5 · 2025</div>
+            <p class="g-desc">以博物馆为背景的叙事解谜游戏，含完整关卡设计文档与 UE5 白盒实现。核心玩法：放大 / 缩小物体与自身。</p>
+            <div class="g-tags"><span class="g-tag">叙事解谜</span><span class="g-tag">UE5</span><span class="g-tag">关卡文档</span></div>
+          </div>
+        </div>
+
+        <div class="g-card" onclick="openM('mj-zelda')">
+          <div class="g-img" onclick="event.stopPropagation(); openM('mj-zelda-img')">
+            <div class="g-carousel" id="g-car-mj-zelda">
+              <div class="g-car-track">
+                <div class="g-car-slide"><img src="works/zelda_01.jpg" alt="塞尔达分析"></div>
+                <div class="g-car-slide"><img src="works/zelda_02.jpg" alt="塞尔达分析"></div>
+                <div class="g-car-slide"><img src="works/zelda_03.jpg" alt="塞尔达分析"></div>
+                <div class="g-car-slide"><img src="works/zelda_04.jpg" alt="塞尔达分析"></div>
+                <div class="g-car-slide"><img src="works/zelda_05.jpg" alt="塞尔达分析"></div>
+                <div class="g-car-slide"><img src="works/zelda_06.jpg" alt="塞尔达分析"></div>
+              </div>
+              <div class="g-arr l" onclick="event.stopPropagation(); moveGCur('mj-zelda', -1)">‹</div>
+              <div class="g-arr r" onclick="event.stopPropagation(); moveGCur('mj-zelda', 1)">›</div>
+              <div class="g-car-dots" id="g-dots-mj-zelda"></div>
+            </div>
+            <span class="g-badge">关卡分析</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">《塞尔达传说：旷野之息》<br>初始台地拆解</div>
+            <div class="g-meta">个人分析 · 53页 · 建筑学视角</div>
+            <p class="g-desc">融合凯文·林奇城市意向理论与彭一刚《建筑空间组合论》，系统拆解初始台地的引导设计、节奏控制与空间叙事。</p>
+            <div class="g-tags"><span class="g-tag">关卡分析</span><span class="g-tag">空间叙事</span><span class="g-tag">跨界理论</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCH PANEL -->
+    <div class="p-panel" id="panel-1">
+      <div class="a-grid">
+        <!-- 大跨体育馆 -->
+        <div class="a-card" onclick="openArchImg('arch01')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch01')">
+            <div class="a-carousel" id="a-car-arch01">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_01.png" alt="体育馆"></div>
+                <div class="a-car-slide"><img src="works/arch_01_2.png" alt="体育馆"></div>
+                <div class="a-car-slide"><img src="works/arch_01_3.jpg" alt="体育馆"></div>
+                <div class="a-car-slide"><img src="works/arch_01_4.png" alt="体育馆"></div>
+                <div class="a-car-slide"><img src="works/arch_01_5.jpg" alt="体育馆"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch01', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch01', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch01"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">Large-span · Sports Architecture</span>
+              大跨度体育馆设计
+            </div>
+            <div class="a-title">中型体育馆设计</div>
+            <div class="a-desc">以中国古典建筑形态为源，探索传统建筑语言在现代的重生与转译——大跨度结构与坡屋顶意象的空间重构。</div>
+            <div class="a-kws"><span class="a-kw">大跨结构</span><span class="a-kw">传统转译</span><span class="a-kw">坡屋顶</span><span class="a-kw">体育馆</span></div>
+          </div>
+        </div>
+
+        <!-- 高层建筑 -->
+        <div class="a-card" onclick="openArchImg('arch02')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch02')">
+            <div class="a-carousel" id="a-car-arch02">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_02.jpg" alt="高层"></div>
+                <div class="a-car-slide"><img src="works/arch_02-2.jpg" alt="高层"></div>
+                <div class="a-car-slide"><img src="works/arch_02-3.jpg" alt="高层"></div>
+                <div class="a-car-slide"><img src="works/arch_02_4.jpg" alt="高层"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch02', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch02', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch02"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">High-rise · Green Architecture</span>
+              超高层 · 绿色低碳
+            </div>
+            <div class="a-title">绿色低碳导向的高层建筑设计</div>
+            <div class="a-desc">引入绿色缝隙劈开塔楼与裙房，绿地还于城市，表皮扭转创造垂直绿化，探索低碳超高层设计新范式。</div>
+            <div class="a-kws"><span class="a-kw">绿色低碳</span><span class="a-kw">缝隙空间</span><span class="a-kw">超高层</span><span class="a-kw">垂直绿化</span></div>
+          </div>
+        </div>
+
+        <!-- 文化馆设计 -->
+        <div class="a-card" onclick="openArchImg('arch03')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch03')">
+            <div class="a-carousel" id="a-car-arch03">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_03.jpg" alt="文化馆"></div>
+                <div class="a-car-slide"><img src="works/arch_03_2.jpg" alt="文化馆"></div>
+                <div class="a-car-slide"><img src="works/arch_03_3.jpeg" alt="文化馆"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch03', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch03', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch03"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">Cultural Architecture · Waterfront</span>
+              文化建筑 · 规划设计
+            </div>
+            <div class="a-title">成都新津通济堰文化中心设计</div>
+            <div class="a-desc">以江上船帆为灵感，混凝土片墙呼应传统民居，漂浮于水面，园林式空间序列营造消隐-乍现-引入-游览的游览体验。</div>
+            <div class="a-kws"><span class="a-kw">文化建筑</span><span class="a-kw">通济堰</span><span class="a-kw">混凝土墙</span><span class="a-kw">临江</span></div>
+          </div>
+        </div>
+
+        <!-- 旧建筑改造 -->
+        <div class="a-card" onclick="openArchImg('arch04')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch04')">
+            <div class="a-carousel" id="a-car-arch04">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_04.png" alt="旧改"></div>
+                <div class="a-car-slide"><img src="works/arch_04_2.png" alt="旧改"></div>
+                <div class="a-car-slide"><img src="works/arch_04_3.png" alt="旧改"></div>
+                <div class="a-car-slide"><img src="works/arch_04_4.jpg" alt="旧改"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch04', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch04', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch04"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">Adaptive Reuse · Urban Boundary</span>
+              更新改造 · 城市边界
+            </div>
+            <div class="a-title">漫坡折廊 · 旧建筑改造</div>
+            <div class="a-desc">工业商混站改造为综合功能空间。总用地 21900m²，新建 4850m²，保留工业元素与形式转译，营造漫坡折廊的空间节奏。</div>
+            <div class="a-kws"><span class="a-kw">旧改</span><span class="a-kw">漫坡折廊</span><span class="a-kw">工业转译</span><span class="a-kw">城市边界</span></div>
+          </div>
+        </div>
+
+        <!-- 小住宅设计 -->
+        <div class="a-card" onclick="openArchImg('arch05')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch05')">
+            <div class="a-carousel" id="a-car-arch05">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_05.png" alt="小住宅"></div>
+                <div class="a-car-slide"><img src="works/arch_05_2.jpg" alt="小住宅"></div>
+                <div class="a-car-slide"><img src="works/arch_05_3.jpg" alt="小住宅"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch05', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch05', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch05"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">Residential · Refined Design</span>
+              小住宅设计
+            </div>
+            <div class="a-title">限定空间下的居住单元精细化设计</div>
+            <div class="a-desc">不足 65 平米的限定空间中，为四位年轻男性设计共享居住单元，底商设定为桌游店，探索"精于嬉"的生活可能。</div>
+            <div class="a-kws"><span class="a-kw">小住宅</span><span class="a-kw">精细化</span><span class="a-kw">共享居住</span><span class="a-kw">限定空间</span></div>
+          </div>
+        </div>
+
+        <!-- 古建测绘 -->
+        <div class="a-card" onclick="openArchImg('arch06')">
+          <div class="a-img-wrap" onclick="event.stopPropagation(); openArchImg('arch06')">
+            <div class="a-carousel" id="a-car-arch06">
+              <div class="a-car-track">
+                <div class="a-car-slide"><img src="works/arch_06.jpg" alt="古建"></div>
+                <div class="a-car-slide"><img src="works/arch_06_2.jpg" alt="古建"></div>
+                <div class="a-car-slide"><img src="works/arch_06_3.jpg" alt="古建"></div>
+              </div>
+              <div class="a-arr l" onclick="event.stopPropagation(); moveACur('arch06', -1)">‹</div>
+              <div class="a-arr r" onclick="event.stopPropagation(); moveACur('arch06', 1)">›</div>
+              <div class="a-car-dots" id="a-dots-arch06"></div>
+            </div>
+          </div>
+          <div class="a-body">
+            <div class="a-theme">
+              <span class="a-theme-en">Heritage Survey · Vernacular Architecture</span>
+              测绘记录 · 乡土建筑
+            </div>
+            <div class="a-title">古建测绘 · 杨氏民宅</div>
+            <div class="a-desc">对重庆潼南双江杨氏民宅（全国重点文物保护单位）进行测绘记录，以手绘方式记录建筑形制与空间特征，延续乡土建筑文化认知。</div>
+            <div class="a-kws"><span class="a-kw">古建测绘</span><span class="a-kw">杨氏民宅</span><span class="a-kw">双江</span><span class="a-kw">国家重点文物</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKETCH PANEL -->
+    <div class="p-panel" id="panel-2">
+      <div class="sk-carousel" id="skCarousel">
+        <div class="sk-arr l" onclick="moveS(-1)">‹</div>
+        <div class="sk-arr r" onclick="moveS(1)">›</div>
+        <div class="sk-track" id="skTrack">
+          <div class="sk-slide" onclick="openSketchModal(0)"><img src="works/sketch_01.jpg" alt="手绘1" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 01</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(1)"><img src="works/sketch_02.jpg" alt="手绘2" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 02</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(2)"><img src="works/sketch_03.jpg" alt="手绘3" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 03</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(3)"><img src="works/sketch_04.jpg" alt="手绘4" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 04</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(4)"><img src="works/sketch_05.jpg" alt="手绘5" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 05</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(5)"><img src="works/sketch_06.jpg" alt="手绘6" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 06</span></div>'"></div>
+          <div class="sk-slide" onclick="openSketchModal(6)"><img src="works/sketch_07.jpg" alt="手绘7" onerror="this.parentElement.innerHTML='<div class=\\'sk-ph\\'><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z\\'/></svg><span>Sketch 07</span></div>'"></div>
+        </div>
+      </div>
+      <div class="sk-dots" id="skDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGE MODALS — Full Screen -->
+<!-- 手绘大图查看 -->
+<div class="img-modal" id="sketch-img-modal" onclick="closeImgM(event)">
+  <button class="img-modal-close" onclick="closeImgM(event)">×</button>
+  <div class="img-modal-content" id="img-sketch-content">
+    <img src="works/sketch_01.jpg" alt="手绘图片">
+  </div>
+  <div class="img-modal-dots" id="img-sketch-dots"></div>
+  <div class="img-modal-nav">
+    <button onclick="prevSketchImg()">← 上一张</button>
+    <button onclick="nextSketchImg()">下一张 →</button>
+  </div>
+</div>
+
+<!-- 建筑项目大图查看 -->
+<div class="img-modal" id="arch-img-modal" onclick="closeImgM(event)">
+  <button class="img-modal-close" onclick="closeImgM(event)">×</button>
+  <div class="img-modal-content" id="img-arch-content">
+    <img src="works/arch_01.png" alt="建筑项目图片">
+  </div>
+  <div class="img-modal-dots" id="img-arch-dots"></div>
+  <div class="img-modal-nav">
+    <button onclick="prevArchImg()">← 上一张</button>
+    <button onclick="nextArchImg()">下一张 →</button>
+  </div>
+</div>
+
+<div class="img-modal" id="mj-jc-img" onclick="closeImgM(event)">
+  <button class="img-modal-close" onclick="closeImgM(event)">×</button>
+  <div class="img-modal-content" id="img-mj-jc-content">
+    <img src="works/mj_01.jpg" alt="极品飞车赛道">
+  </div>
+  <div class="img-modal-dots" id="img-mj-jc-dots">
+    <div class="img-modal-dot on" onclick="goImg('mj-jc', 0)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-jc', 1)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-jc', 2)"></div>
+  </div>
+  <div class="img-modal-nav">
+    <button onclick="prevImg('mj-jc')">← 上一张</button>
+    <button onclick="nextImg('mj-jc')">下一张 →</button>
+  </div>
+</div>
+
+<div class="img-modal" id="mj-ww-img" onclick="closeImgM(event)">
+  <button class="img-modal-close" onclick="closeImgM(event)">×</button>
+  <div class="img-modal-content" id="img-mj-ww-content">
+    <img src="works/ww_01.png" alt="文物修复师">
+  </div>
+  <div class="img-modal-dots" id="img-mj-ww-dots">
+    <div class="img-modal-dot on" onclick="goImg('mj-ww', 0)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-ww', 1)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-ww', 2)"></div>
+  </div>
+  <div class="img-modal-nav">
+    <button onclick="prevImg('mj-ww')">← 上一张</button>
+    <button onclick="nextImg('mj-ww')">下一张 →</button>
+  </div>
+</div>
+
+<div class="img-modal" id="mj-zelda-img" onclick="closeImgM(event)">
+  <button class="img-modal-close" onclick="closeImgM(event)">×</button>
+  <div class="img-modal-content" id="img-mj-zelda-content">
+    <img src="works/zelda_01.jpg" alt="塞尔达分析">
+  </div>
+  <div class="img-modal-dots" id="img-mj-zelda-dots">
+    <div class="img-modal-dot on" onclick="goImg('mj-zelda', 0)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-zelda', 1)"></div>
+    <div class="img-modal-dot" onclick="goImg('mj-zelda', 2)"></div>
+  </div>
+  <div class="img-modal-nav">
+    <button onclick="prevImg('mj-zelda')">← 上一张</button>
+    <button onclick="nextImg('mj-zelda')">下一张 →</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<!-- 极品飞车 -->
+<div class="modal-bg" id="mj-jc" onclick="closeM(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd"><button class="modal-cls" onclick="closeAllM()">×</button></div>
+    <div class="modal-bd">
+      <span class="m-badge intern">实习项目</span>
+      <h2 class="m-title">《极品飞车：集结》沙海惊鸿赛道</h2>
+      <p class="m-meta">腾讯天美 Timi Studio · 2025.07 — 2025.10 · 暑期实习独立完成</p>
+      <div class="m-img-gallery" onclick="openM('mj-jc-img')" style="cursor:pointer;margin-bottom:24px;border-radius:12px;overflow:hidden;height:240px;background:var(--bg-warm);position:relative;">
+        <img src="works/mj_01.jpg" alt="极品飞车赛道" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;bottom:12px;right:12px;padding:6px 14px;background:rgba(26,22,18,.75);color:#fff;font-size:.72rem;border-radius:16px;">点击查看大图</div>
+      </div>
+      <div class="m-sec"><div class="m-sec-tl">项目概述</div><p>在腾讯天美实习期间，独立完成沙海惊鸿赛道的关卡设计，负责赛道白盒搭建、视觉元素布置与玩法验证。关卡白盒阶段获得 8万+ 玩家点赞，为该项目首条 C 级封闭场景赛道。</p></div>
+      <div class="m-sec"><div class="m-sec-tl">负责内容</div><ul><li>赛道整体规划与难度曲线设计</li><li>封闭场景空间节奏控制</li><li>视觉引导系统与美术协作</li><li>玩法体验调优与玩家反馈迭代</li></ul></div>
+      <div class="m-sec"><div class="m-sec-tl">设计思路</div><p>以沙漠为主题，通过视觉引导与节奏控制，在高速竞速中营造紧张追逐感。封闭场景设计保证了 C 级难度的可控体验，同时兼顾不同水平玩家的通关感受。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 文物修复师 -->
+<div class="modal-bg" id="mj-ww" onclick="closeM(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd"><button class="modal-cls" onclick="closeAllM()">×</button></div>
+    <div class="modal-bd">
+      <span class="m-badge">个人 Demo</span>
+      <h2 class="m-title">《文物修复师——传说博物馆》</h2>
+      <p class="m-meta">独立开发 · UE5 · 2025</p>
+      <div class="m-img-gallery" onclick="openM('mj-ww-img')" style="cursor:pointer;margin-bottom:24px;border-radius:12px;overflow:hidden;height:240px;background:var(--bg-warm);position:relative;">
+        <img src="works/ww_01.png" alt="文物修复师" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;bottom:12px;right:12px;padding:6px 14px;background:rgba(26,22,18,.75);color:#fff;font-size:.72rem;border-radius:16px;">点击查看大图</div>
+      </div>
+      <div class="m-sec"><div class="m-sec-tl">项目概述</div><p>以博物馆为背景的叙事解谜游戏。玩家扮演一名博物馆管理员，在夜间巡查中揭开传说博物馆的秘密——"规衡"被破坏，时空长河面临危机。含完整的关卡设计白盒文档与 UE5 实现。</p></div>
+      <div class="m-sec"><div class="m-sec-tl">核心玩法</div><ul><li><strong>放大 / 缩小物体</strong>：瞄准物体边缘，滚轮切换尺寸（0.5× / 0.75× / 1× / 1.5× / 2×），修复污染点，达成"规衡"</li><li><strong>放大 / 缩小自身</strong>：Q 键放大（2×），E 键缩小（0.25×），变大秒杀敌人，变小穿越窄缝</li></ul></div>
+      <div class="m-sec"><div class="m-sec-tl">关卡结构</div><p>分为 5 个阶段：进入博物馆 → 遭遇异常 → 进入规衡空间 → 学习能力 → 修复与 BOSS 战。"规衡"为核心理念，规衡空间由纯粹几何体构成，是象征尺度与平衡的标志物。</p></div>
+      <div class="m-sec"><div class="m-sec-tl">设计文档</div><p>完整输出前期思考、关卡目标、阶段流程、核心场景（博物馆 + 规衡空间）、放大缩小玩法系统等设计文档。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 塞尔达 -->
+<div class="modal-bg" id="mj-zelda" onclick="closeM(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd"><button class="modal-cls" onclick="closeAllM()">×</button></div>
+    <div class="modal-bd">
+      <span class="m-badge">关卡分析</span>
+      <h2 class="m-title">《塞尔达传说：旷野之息》初始台地拆解</h2>
+      <p class="m-meta">个人分析 · 53页 · 建筑学视角 · 2025</p>
+      <div class="m-img-gallery" onclick="openM('mj-zelda-img')" style="cursor:pointer;margin-bottom:24px;border-radius:12px;overflow:hidden;height:240px;background:var(--bg-warm);position:relative;">
+        <img src="works/zelda_01.jpg" alt="塞尔达分析" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;bottom:12px;right:12px;padding:6px 14px;background:rgba(26,22,18,.75);color:#fff;font-size:.72rem;border-radius:16px;">点击查看大图</div>
+      </div>
+      <div class="m-sec"><div class="m-sec-tl">分析框架</div><p>以凯文·林奇城市意向理论与彭一刚《建筑空间组合论》为核心框架，融合德西自我决定理论（SDT）、艾宾浩斯记忆曲线与心流理论，对初始台地教学关卡进行系统性多学科拆解，输出 53 页专业分析文档。</p></div>
+      <div class="m-sec"><div class="m-sec-tl">设计目标</div><ul><li>完成<strong>玩法机制教学</strong>：基础操作 → 特色玩法 → 开放世界三阶段递进</li><li>完成<strong>故事引入</strong>：海拉鲁背景 + 林克新剧情动力 + 世界观渗透</li><li>将机制教学与游戏叙事深度融合，打破传统"先教学关卡—后开放世界"的割裂感</li></ul></div>
+      <div class="m-sec"><div class="m-sec-tl">关卡结构</div><p>抽象为两层：① 复苏神殿 → 初始高塔 → 四大神庙 → 时之神殿的阶段关卡序列；② 节点间开放世界填充（推荐路径、环境、碎片关卡）。采用<strong>弱引导策略</strong>，用环境地形、空间布局与氛围引导玩家自然探索推荐路径，规避"空气墙"对开放世界体验的破坏。</p></div>
+      <div class="m-sec"><div class="m-sec-tl">理论应用</div><ul><li><strong>凯文·林奇城市意向五要素</strong>：路径（推荐路径）、边界（高原绝壁）、区域（东南西北四区）、节点（初始高塔、神庙入口）、地标（时之神殿尖顶）</li><li><strong>德西自我决定理论 SDT</strong>：自主性（高自主权）、胜任感（教学五阶段渐进）、归属感（与老人、塞尔达的对话）</li><li><strong>心流理论</strong>：目标清晰 / 无干扰 / 即时反馈 / 持续挑战，维持"心流通道"</li><li><strong>彭一刚《建筑空间组合论》</strong>：对比与变化、重复与再现、衔接与过渡、渗透与层次、引导与暗示、序列与节奏</li></ul></div>
+      <div class="m-sec"><div class="m-sec-tl">核心结论</div><p>初始台地是"教学即体验"的典范：任天堂用弱引导将整个海拉鲁大陆的精华浓缩于一片高原，通过"形式追随功能"的空间组织，让玩家在探索中自学成才，在叙事徐徐展开的同时获得探索海拉鲁的能力与勇气——这是建筑空间叙事思维在游戏关卡设计中的完美印证。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-title-en">Contact / 联系我</div>
+      <div class="ornament" style="margin:0 auto 20px"></div>
+      <h2 class="section-title">联系我</h2>
+      <p class="section-sub" style="margin:0 auto; text-align:center">对关卡策划有兴趣，或想聊建筑与游戏的跨界结合？随时欢迎联系 😊</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:xqhmx@qq.com" class="contact-lk">
+        <div class="contact-ic">✉</div>
+        <div>
+          <div style="font-weight:600;font-size:.88rem">xqhmx@qq.com</div>
+          <div style="font-size:.72rem;color:var(--text-dim)">Email</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Aristo Xiong · <em>用建筑思维，做有温度的关卡</em></p>
+</footer>
+
+<script>
+  /* NAV */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+  function toggleMM() { document.getElementById('mmenu').classList.toggle('open'); }
+
+  /* ARTISTIC TABS — sliding pill */
+  function switchTab(idx) {
+    const tabs = document.querySelectorAll('.p-tab');
+    const pills = document.getElementById('pTabs');
+    const panels = document.querySelectorAll('.p-panel');
+    tabs.forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+    });
+    panels.forEach((p, i) => {
+      p.classList.toggle('active', i === idx);
+    });
+    pills.className = 'p-tabs tab-' + idx;
+  }
+
+  /* MODAL */
+  function openM(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeM(e) { if (e.target === e.currentTarget) closeAllM(); }
+  function closeAllM() { document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('open')); document.body.style.overflow = ''; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllM(); });
+
+
+
+  /* SKETCH CAROUSEL */
+  let cur = 0, total = 7;
+  const dotsEl = document.getElementById('skDots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'sk-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goS(i);
+    dotsEl.appendChild(d);
+  }
+  function goS(i) {
+    cur = ((i % total) + total) % total;
+    document.getElementById('skTrack').style.transform = `translateX(-${cur * 100}%)`;
+    document.querySelectorAll('.sk-dot').forEach((d, j) => d.classList.toggle('active', j === cur));
+  }
+  function moveS(d) { goS(cur + d); }
+  let ap = setInterval(() => moveS(1), 3500);
+  document.querySelector('.sk-carousel').addEventListener('mouseenter', () => clearInterval(ap));
+  document.querySelector('.sk-carousel').addEventListener('mouseleave', () => { ap = setInterval(() => moveS(1), 3500); });
+
+  /* ============================================
+     GAME CARD CAROUSELS — inline
+  ============================================ */
+  const gCarousels = ['mj-jc', 'mj-ww', 'mj-zelda'];
+  const gCur = {};
+  gCarousels.forEach(id => {
+    const carousel = document.getElementById('g-car-' + id);
+    const dotsEl = document.getElementById('g-dots-' + id);
+    const track = carousel ? carousel.querySelector('.g-car-track') : null;
+    const slides = track ? track.querySelectorAll('.g-car-slide') : [];
+    const total = slides.length;
+    gCur[id] = 0;
+    
+    // Create dots
+    if (dotsEl) {
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('div');
+        d.className = 'g-car-dot' + (i === 0 ? ' on' : '');
+        d.onclick = () => { event.stopPropagation(); goGImg(id, i); };
+        dotsEl.appendChild(d);
+      }
+    }
+  });
+  
+  function goGImg(id, idx) {
+    const carousel = document.getElementById('g-car-' + id);
+    const track = carousel ? carousel.querySelector('.g-car-track') : null;
+    const dotsEl = document.getElementById('g-dots-' + id);
+    if (!track) return;
+    const total = track.querySelectorAll('.g-car-slide').length;
+    gCur[id] = ((idx % total) + total) % total;
+    track.style.transform = `translateX(-${gCur[id] * 100}%)`;
+    if (dotsEl) {
+      dotsEl.querySelectorAll('.g-car-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === gCur[id]);
+      });
+    }
+  }
+  
+  function moveGCur(id, dir) {
+    const carousel = document.getElementById('g-car-' + id);
+    const track = carousel ? carousel.querySelector('.g-car-track') : null;
+    if (!track) return;
+    const total = track.querySelectorAll('.g-car-slide').length;
+    goGImg(id, gCur[id] + dir);
+  }
+
+  /* ============================================
+     ARCH CARD CAROUSELS — inline
+  ============================================ */
+  const aCarousels = ['arch01', 'arch02', 'arch03', 'arch04', 'arch05', 'arch06'];
+  const aCur = {};
+  aCarousels.forEach(id => {
+    const carousel = document.getElementById('a-car-' + id);
+    const dotsEl = document.getElementById('a-dots-' + id);
+    const track = carousel ? carousel.querySelector('.a-car-track') : null;
+    const slides = track ? track.querySelectorAll('.a-car-slide') : [];
+    const total = slides.length;
+    aCur[id] = 0;
+    
+    // Create dots
+    if (dotsEl) {
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('div');
+        d.className = 'a-car-dot' + (i === 0 ? ' on' : '');
+        d.onclick = () => { event.stopPropagation(); goAImg(id, i); };
+        dotsEl.appendChild(d);
+      }
+    }
+  });
+  
+  function goAImg(id, idx) {
+    const carousel = document.getElementById('a-car-' + id);
+    const track = carousel ? carousel.querySelector('.a-car-track') : null;
+    const dotsEl = document.getElementById('a-dots-' + id);
+    if (!track) return;
+    const total = track.querySelectorAll('.a-car-slide').length;
+    aCur[id] = ((idx % total) + total) % total;
+    track.style.transform = `translateX(-${aCur[id] * 100}%)`;
+    if (dotsEl) {
+      dotsEl.querySelectorAll('.a-car-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === aCur[id]);
+      });
+    }
+  }
+  
+  function moveACur(id, dir) {
+    const carousel = document.getElementById('a-car-' + id);
+    const track = carousel ? carousel.querySelector('.a-car-track') : null;
+    if (!track) return;
+    const total = track.querySelectorAll('.a-car-slide').length;
+    goAImg(id, aCur[id] + dir);
+  }
+
+  /* TIMELINE FADE */
+  const tlScroll = document.getElementById('tlScroll');
+  const tlFade = document.getElementById('tlFade');
+  if (tlScroll && tlFade) {
+    tlScroll.addEventListener('scroll', () => {
+      const { scrollTop, scrollHeight, clientHeight } = tlScroll;
+      tlFade.style.opacity = (scrollTop + clientHeight >= scrollHeight - 10) ? '0' : '1';
+    });
+  }
+
+  /* IMAGE MODAL — Game Projects */
+  const imgData = {
+    'mj-jc': ['works/mj_01.jpg', 'works/mj_02.gif', 'works/mj_03.gif'],
+    'mj-ww': ['works/ww_01.png', 'works/ww_02.png', 'works/ww_03.png'],
+    'mj-zelda': ['works/zelda_01.jpg', 'works/zelda_02.jpg', 'works/zelda_03.jpg', 'works/zelda_04.jpg', 'works/zelda_05.jpg', 'works/zelda_06.jpg'],
+    'arch01': ['works/arch_01.png', 'works/arch_01_2.png', 'works/arch_01_3.jpg', 'works/arch_01_4.png', 'works/arch_01_5.jpg'],
+    'arch02': ['works/arch_02.jpg', 'works/arch_02-2.jpg', 'works/arch_02-3.jpg', 'works/arch_02_4.jpg'],
+    'arch03': ['works/arch_03.jpg', 'works/arch_03_2.jpg', 'works/arch_03_3.jpeg'],
+    'arch04': ['works/arch_04.png', 'works/arch_04_2.png', 'works/arch_04_3.png', 'works/arch_04_4.jpg'],
+    'arch05': ['works/arch_05.png', 'works/arch_05_2.jpg', 'works/arch_05_3.jpg'],
+    'arch06': ['works/arch_06.jpg', 'works/arch_06_2.jpg', 'works/arch_06_3.jpg'],
+    'sketch': ['works/sketch_01.jpg', 'works/sketch_02.jpg', 'works/sketch_03.jpg', 'works/sketch_04.jpg', 'works/sketch_05.jpg', 'works/sketch_06.jpg', 'works/sketch_07.jpg']
+  };
+  const imgCur = {};
+
+  function goImg(id, idx) {
+    const imgs = imgData[id];
+    if (!imgs) return;
+    imgCur[id] = idx;
+    const content = document.getElementById('img-' + id + '-content');
+    const dots = document.getElementById('img-' + id + '-dots');
+    if (content) content.innerHTML = `<img src="${imgs[idx]}" alt="项目图片" style="max-width:90vw;max-height:75vh;object-fit:contain;">`;
+    if (dots) {
+      dots.querySelectorAll('.img-modal-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === idx);
+      });
+    }
+  }
+  function nextImg(id) {
+    const imgs = imgData[id];
+    if (!imgs) return;
+    goImg(id, (imgCur[id] + 1) % imgs.length);
+  }
+  function prevImg(id) {
+    const imgs = imgData[id];
+    if (!imgs) return;
+    goImg(id, (imgCur[id] - 1 + imgs.length) % imgs.length);
+  }
+  function openArchImg(id) {
+    const modal = document.getElementById('arch-img-modal');
+    const content = document.getElementById('img-arch-content');
+    const dots = document.getElementById('img-arch-dots');
+    const imgs = imgData[id] || [];
+    imgCur['arch'] = 0;
+    modal.dataset.archId = id;
+    modal.dataset.total = imgs.length;
+    if (content) {
+      content.innerHTML = imgs.length > 0 
+        ? `<img src="${imgs[0]}" alt="建筑项目图片" style="max-width:90vw;max-height:75vh;object-fit:contain;">`
+        : '<div style="color:#fff;padding:40px;text-align:center;">暂无图片</div>';
+    }
+    if (dots) {
+      dots.innerHTML = imgs.map((_, i) => 
+        `<div class="img-modal-dot ${i === 0 ? 'on' : ''}" onclick="goArchImg(${i})"></div>`
+      ).join('');
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function goArchImg(idx) {
+    const modal = document.getElementById('arch-img-modal');
+    const id = modal.dataset.archId;
+    const imgs = imgData[id] || [];
+    imgCur['arch'] = idx;
+    const content = document.getElementById('img-arch-content');
+    const dots = document.getElementById('img-arch-dots');
+    if (content) content.innerHTML = `<img src="${imgs[idx]}" alt="建筑项目图片" style="max-width:90vw;max-height:75vh;object-fit:contain;">`;
+    if (dots) {
+      dots.querySelectorAll('.img-modal-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === idx);
+      });
+    }
+  }
+  function nextArchImg() {
+    const modal = document.getElementById('arch-img-modal');
+    const id = modal.dataset.archId;
+    const imgs = imgData[id] || [];
+    const total = parseInt(modal.dataset.total) || imgs.length;
+    goArchImg((imgCur['arch'] + 1) % total);
+  }
+  function prevArchImg() {
+    const modal = document.getElementById('arch-img-modal');
+    const id = modal.dataset.archId;
+    const imgs = imgData[id] || [];
+    const total = parseInt(modal.dataset.total) || imgs.length;
+    goArchImg((imgCur['arch'] - 1 + total) % total);
+  }
+  function closeImgM(e) {
+    if (e.target.classList.contains('img-modal') || e.target.classList.contains('img-modal-close')) {
+      document.querySelectorAll('.img-modal').forEach(m => m.classList.remove('open'));
+      document.body.style.overflow = '';
+    }
+  }
+
+  /* SKETCH MODAL */
+  let sketchCur = 0;
+  function openSketchModal(idx) {
+    sketchCur = idx;
+    const modal = document.getElementById('sketch-img-modal');
+    const content = document.getElementById('img-sketch-content');
+    const dots = document.getElementById('img-sketch-dots');
+    const imgs = imgData['sketch'] || [];
+    if (content) {
+      content.innerHTML = `<img src="${imgs[idx]}" alt="手绘图片" style="max-width:90vw;max-height:75vh;object-fit:contain;">`;
+    }
+    if (dots) {
+      dots.innerHTML = imgs.map((_, i) =>
+        `<div class="img-modal-dot ${i === idx ? 'on' : ''}" onclick="goSketchImg(${i}); event.stopPropagation();"></div>`
+      ).join('');
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function goSketchImg(idx) {
+    sketchCur = idx;
+    const content = document.getElementById('img-sketch-content');
+    const dots = document.getElementById('img-sketch-dots');
+    const imgs = imgData['sketch'] || [];
+    if (content) {
+      content.innerHTML = `<img src="${imgs[idx]}" alt="手绘图片" style="max-width:90vw;max-height:75vh;object-fit:contain;">`;
+    }
+    if (dots) {
+      dots.querySelectorAll('.img-modal-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === idx);
+      });
+    }
+  }
+  function prevSketchImg() {
+    const imgs = imgData['sketch'] || [];
+    goSketchImg((sketchCur - 1 + imgs.length) % imgs.length);
+  }
+  function nextSketchImg() {
+    const imgs = imgData['sketch'] || [];
+    goSketchImg((sketchCur + 1) % imgs.length);
+  }
+  
+  /* Keyboard support for image modal navigation */
+  document.addEventListener('keydown', (e) => {
+    const openModal = document.querySelector('.img-modal.open');
+    if (!openModal) return;
+    if (e.key === 'ArrowLeft') {
+      if (openModal.id === 'arch-img-modal') prevArchImg();
+      else if (openModal.id === 'sketch-img-modal') prevSketchImg();
+      else {
+        const id = openModal.id.replace('mj-', 'mj-');
+        if (id.includes('mj-jc')) prevImg('mj-jc');
+        else if (id.includes('mj-ww')) prevImg('mj-ww');
+        else if (id.includes('mj-zelda')) prevImg('mj-zelda');
+      }
+    } else if (e.key === 'ArrowRight') {
+      if (openModal.id === 'arch-img-modal') nextArchImg();
+      else if (openModal.id === 'sketch-img-modal') nextSketchImg();
+      else {
+        const id = openModal.id.replace('mj-', 'mj-');
+        if (id.includes('mj-jc')) nextImg('mj-jc');
+        else if (id.includes('mj-ww')) nextImg('mj-ww');
+        else if (id.includes('mj-zelda')) nextImg('mj-zelda');
+      }
+    }
+  });
+</script>
+</body>
+</html>
